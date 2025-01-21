@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import h5py
 import image
 
@@ -60,6 +61,21 @@ with h5py.File('FuseMyCells.hdf5', 'a') as hdf:
                 sample = group.create_group(f'image_{i}')
                 for k in X_meta.keys():
                     sample.attrs[k] = X_meta[k]
+
+                # self computed attributes
+                sample.attrs['angle_min']  = np.min(X)
+                sample.attrs['angle_max']  = np.max(X)
+                sample.attrs['angle_mean'] = np.mean(X)
+                sample.attrs['angle_median'] = np.median(X)
+                sample.attrs['angle_std']  = np.std(X)
+                sample.attrs['angle_shape'] = X.shape
+
+                sample.attrs['fused_min']  = np.min(Y)
+                sample.attrs['fused_max']  = np.max(Y)
+                sample.attrs['fused_mean'] = np.mean(Y)
+                sample.attrs['fused_median'] = np.median(Y)
+                sample.attrs['fused_std']  = np.std(Y)
+                sample.attrs['fused_shape'] = Y.shape
 
                 dsX = sample.create_dataset(f'angle', data=X)
                 dsY = sample.create_dataset(f'fused', data=Y)
