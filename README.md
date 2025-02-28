@@ -84,8 +84,9 @@ h5py==3.12.1
 numpy==2.2.1
 tifffile==2025.1.10
 
-scikit-image==
-scipy==
+scipy==1.15.2
+scikit-image==0.25.2
+PyWavelets==1.8.0
 
 tensorflow==2.18.0
 ```
