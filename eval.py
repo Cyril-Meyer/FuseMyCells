@@ -27,7 +27,7 @@ parser.add_argument('--args', type=str, nargs='+',
 parser.add_argument('--dataset', type=str, default='FuseMyCells.hdf5')
 args = parser.parse_args()
 
-if args.use_gpu:
+if not args.use_gpu:
     os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 # TensorFlow import may change depending on CUDA visibility
