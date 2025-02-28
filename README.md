@@ -7,7 +7,9 @@ Link to the challenge for more information :
 
 
 ## Results
-For now, no results at all.
+
+* [test_phase/leaderboard](https://fusemycells.grand-challenge.org/evaluation/test_phase/leaderboard/)
+  * closed 28/02/2025
 
 
 ## Usage
@@ -28,6 +30,12 @@ and then put in a single file named `FuseMyCells.hdf5`.
 
 ## Changelog
 
+#### 28/02/2025
+
+* Adding evaluation of method script
+  * usage for classical computer vision methods
+* Update README (put my exp results in the idea section)
+
 #### 17/01/2025
 
 * Working on data acquisition and preprocessing
@@ -35,12 +43,49 @@ and then put in a single file named `FuseMyCells.hdf5`.
   * script to convert all the images into a single HDF5 file for easier load
 
 
-## Current idea
+## Ideas
+
+* Merge multiple methods
+  * Average of the two best methods ?
+
+### Classical computer vision
+
+* Simple filters
+  * Gaussian filter with `sigma=0.5` is the best result for now.
+  * Wavelet, test in progress, looks promising.
+  * Total variation (Bregmann) worse than nothing.
+* Simple morphological filters
+  * Ball erosion / dilation / opening / closing : worse than nothing.
+
+### Machine Learning (non deep but learning)
+
+* Learned convolution (single layer and single / multiple kernel)
+  * Not tested yet.
+* Single learned morphological neural network
+  * Worse than nothing.
+
+### Deep Learning
 
 * 2D and 3D U-Net
+  * Worse than nothing.
 * Multiple scale prediction
-* Diffusion model
-  * learn noise to image
-  * predict image to image
-* Merge multiple methods
+  * Best results seems to show that the smallest the context is, the best
+    are the results.
 * Morphological neural network (max+ convolutions) post processing
+  * Single layers seems the "less bad"
+* Diffusion model (learn noise to image / predict image to image)
+  * TLDT (too long didn't test)
+
+
+## Requirements
+
+```
+h5py==3.12.1
+numpy==2.2.1
+tifffile==2025.1.10
+
+scikit-image==
+scipy==
+
+tensorflow==2.18.0
+```
