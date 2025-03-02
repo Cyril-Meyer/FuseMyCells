@@ -68,7 +68,7 @@ for k1 in dataset:
         scores['all'].append((method_score - base_score) / (1 - base_score))
         scores[k1].append((method_score - base_score) / (1 - base_score))
 
-print(f"{str(method.__name__)},"
+print(f">>>>> {str(method.__name__)},"
       f"{' '.join(args.args)},"
       f"{np.mean(scores['all'])},"
       f"{np.mean(scores['nucleus'])},"
