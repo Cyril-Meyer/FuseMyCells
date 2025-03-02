@@ -65,8 +65,8 @@ for k1 in dataset:
         base_score = metric(image_input, image_truth)
         method_score = metric(method(image_input, **args_dict), image_truth)
 
-        scores['all'].append(method_score - base_score)
-        scores[k1].append(method_score - base_score)
+        scores['all'].append((method_score - base_score) / (1 - base_score))
+        scores[k1].append((method_score - base_score) / (1 - base_score))
 
 print(f"{str(method.__name__)},"
       f"{' '.join(args.args)},"
