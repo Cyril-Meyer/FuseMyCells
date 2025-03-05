@@ -25,6 +25,8 @@ parser.add_argument('--method', type=str, required=True,
 parser.add_argument('--args', type=str, nargs='+',
                     help='List of key=value arguments for the method')
 parser.add_argument('--dataset', type=str, default='FuseMyCells.hdf5')
+parser.add_argument('--crop-data', action='store_true',
+                    help='Flag to indicate to crop the dataset to only eval on the center')
 args = parser.parse_args()
 
 if not args.use_gpu:
@@ -53,14 +55,16 @@ for k1 in dataset:
     scores[k1] = []
 
     for k2 in dataset[k1]:
-        z, y, x = dataset[k1][k2].attrs['angle_shape']
-
-        mid_z = z // 4
-        mid_y = y // 4
-        mid_x = x // 4
-
-        image_input = dataset[k1][k2]['angle'][mid_z:3 * mid_z, mid_y:3 * mid_y, mid_x:3 * mid_x]
-        image_truth = dataset[k1][k2]['fused'][mid_z:3 * mid_z, mid_y:3 * mid_y, mid_x:3 * mid_x]
+        if args.crop_data:
+            z, y, x = dataset[k1][k2].attrs['angle_shape']
+            mid_z = z // 4
+            mid_y = y // 4
+            mid_x = x // 4
+            image_input = dataset[k1][k2]['angle'][mid_z:3 * mid_z, mid_y:3 * mid_y, mid_x:3 * mid_x]
+            image_truth = dataset[k1][k2]['fused'][mid_z:3 * mid_z, mid_y:3 * mid_y, mid_x:3 * mid_x]
+        else:
+            image_input = dataset[k1][k2]['angle']
+            image_truth = dataset[k1][k2]['fused']
 
         base_score = metric(image_input, image_truth)
         method_score = metric(method(image_input, **args_dict), image_truth)
