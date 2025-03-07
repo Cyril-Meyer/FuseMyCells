@@ -7,12 +7,15 @@ import skimage
 import scipy
 
 from data.normalization import percentile_normalization
+import methods
 
 # Methods
 method_mapping = {
     'gaussian_filter':    scipy.ndimage.gaussian_filter,
     'denoise_wavelet':    skimage.restoration.denoise_wavelet,
     'denoise_tv_bregman': skimage.restoration.denoise_tv_bregman,
+    'gaussian_filter_center': methods.gaussian_filter_center,
+    'gaussian_filter_except_center': methods.gaussian_filter_except_center,
 }
 
 # Argument parser

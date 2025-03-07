@@ -9,8 +9,8 @@ Link to the challenge for more information :
 ## Results
 
 * [test_phase/leaderboard](https://fusemycells.grand-challenge.org/evaluation/test_phase/leaderboard/)
-  * closed 28/02/2025
-
+  * closed 07/03/2025 (initial date 28/02/2025)
+* [evaluation/leaderboard](https://fusemycells.grand-challenge.org/evaluation/evaluation/leaderboard/)
 
 ## Usage
 
@@ -28,7 +28,27 @@ Now, the zip files have been extracted to an `images` folder
 and then put in a single file named `FuseMyCells.hdf5`.
 
 
+## Method
+
+Taking the [docker_template](https://seafile.lirmm.fr/d/233a5a399c8544dfb41a/) given by the organizer as a start point.
+
+```python
+from scipy import ndimage
+if metadata['channel'] == 'nucleus':
+    image_predict = ndimage.gaussian_filter(image_input, 0.442)
+else:
+    image_predict = ndimage.gaussian_filter(image_input, 0.5)
+```
+
+The filter sigma values have been manually selected from evaluation on the training dataset.
+
+
 ## Changelog
+
+#### 07/03/2025
+
+* Add result used to specify methods
+* Update README (add method)
 
 #### 28/02/2025
 
