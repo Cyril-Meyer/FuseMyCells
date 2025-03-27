@@ -17,6 +17,7 @@ import tifffile
 
 # from tools import percentile_normalization
 
+
 print(" END IMPORT ")
 
 INPUT_PATH = Path("/input/images/fluorescence-lightsheet-3D-microscopy")
@@ -41,7 +42,7 @@ os.system("ls -l " + str(RESOURCE_PATH))
 
 def run():
     print(" LOAD NETWORK ")
-    # model = MyModel
+    # model = mynetwork
     # weight_file = join(RESOURCE_PATH, your_model.keras")
     # model.load_weights(weight_file)
 
@@ -53,7 +54,33 @@ def run():
             image_input, metadata = read_image(join(INPUT_PATH,input_file_name))
 
             # Prediction
-            image_predict = np.zeros(image_input.shape, dtype = np.uint16) # model.predict()
+            # image_predict = np.zeros(image_input.shape, dtype = np.uint16) # model.predict()
+            # V1
+            '''
+            image_predict = np.copy(image_input)
+            '''
+            # V2 & 3
+            '''
+            from scipy import ndimage
+            image_predict = ndimage.gaussian_filter(image_input, 0.5)
+            # image_predict = ndimage.gaussian_filter(image_input, 0.48)
+            '''
+            # V4
+            '''
+            import skimage.restoration
+            image_predict = skimage.restoration.denoise_wavelet(image_input, 11.0)
+            '''
+            # V5
+            '''
+            import skimage.morphology
+            image_predict = skimage.morphology.closing(image_input, skimage.morphology.ball(1.0))
+            '''
+            # V6 / VF
+            from scipy import ndimage
+            if metadata['channel'] == 'nucleus':
+                image_predict = ndimage.gaussian_filter(image_input, 0.442)
+            else:
+                image_predict = ndimage.gaussian_filter(image_input, 0.5)
 
             save_image(location = join(OUTPUT_PATH, basename(input_file_name)),
                        array = image_predict,
@@ -65,6 +92,7 @@ def run():
     for output_images in listdir(OUTPUT_PATH):
         print(" --> FOUND "+str(output_images))
     return 0
+
 
 
 def standardize_metadata(metadata : dict):
@@ -79,6 +107,7 @@ def standardize_metadata(metadata : dict):
         "shape": ["shape"],
         "study": ["study"],
     }
+
     # Normalize metadata by looking up possible keys
     standardized_metadata = {}
     for standard_key, possible_keys in key_map.items():
@@ -90,7 +119,9 @@ def standardize_metadata(metadata : dict):
     return standardized_metadata
 
 
+
 def read_image(location): # WARNING IMAGE DATA EN ZYX
+    import tifffile
     # Read the TIFF file and get the image and metadata
     with tifffile.TiffFile(location) as tif:
 
@@ -113,6 +144,7 @@ def read_image(location): # WARNING IMAGE DATA EN ZYX
             else:
                 metadata = tif.pages[0].tags['ImageDescription'].value
                 print(f"error loading metadata: {metadata}, type of object : {type(metadata)}")
+
 
 
 def save_image(*, location, array, metadata):

@@ -1,4 +1,0 @@
-tifffile
-xmltodict
-scikit-image
-numpy
