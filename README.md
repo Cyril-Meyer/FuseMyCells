@@ -11,6 +11,7 @@ Link to the challenge for more information :
 * [test_phase/leaderboard](https://fusemycells.grand-challenge.org/evaluation/test_phase/leaderboard/)
   * closed 07/03/2025 (initial date 28/02/2025)
 * [evaluation/leaderboard](https://fusemycells.grand-challenge.org/evaluation/evaluation/leaderboard/)
+  * closed 17/03/2025
 
 ## Usage
 
@@ -27,6 +28,15 @@ from this folder.
 Now, the zip files have been extracted to an `images` folder
 and then put in a single file named `FuseMyCells.hdf5`.
 
+### Run an evaluation
+
+```
+usage: eval.py [-h] [--use-gpu] --method {gaussian_filter,denoise_wavelet,denoise_tv_bregman} [--args ARGS [ARGS ...]]
+               [--dataset DATASET] [--crop-data]
+eval.py: error: the following arguments are required: --method
+```
+
+`python eval.py --method gaussian_filter --args sigma=0.5 --dataset FuseMyCells.hdf5`
 
 ## Method
 
@@ -41,9 +51,15 @@ else:
 ```
 
 The filter sigma values have been manually selected from evaluation on the training dataset.
+The evaluation process is done using `eval.py` and in our case usage of the `run.sh` script.
 
 
 ## Changelog
+
+#### 27/03/2025
+
+* Update README (cleaning for final version)
+* Add code for the docker
 
 #### 07/03/2025
 
@@ -61,52 +77,3 @@ The filter sigma values have been manually selected from evaluation on the train
 * Working on data acquisition and preprocessing
   * script to unzip all the data at once
   * script to convert all the images into a single HDF5 file for easier load
-
-
-## Ideas
-
-* Merge multiple methods
-  * Average of the two best methods ?
-
-### Classical computer vision
-
-* Simple filters
-  * Gaussian filter with `sigma=0.5` is the best result for now.
-  * Wavelet, test in progress, looks promising.
-  * Total variation (Bregmann) worse than nothing.
-* Simple morphological filters
-  * Ball erosion / dilation / opening / closing : worse than nothing.
-
-### Machine Learning (non deep but learning)
-
-* Learned convolution (single layer and single / multiple kernel)
-  * Not tested yet.
-* Single learned morphological neural network
-  * Worse than nothing.
-
-### Deep Learning
-
-* 2D and 3D U-Net
-  * Worse than nothing.
-* Multiple scale prediction
-  * Best results seems to show that the smallest the context is, the best
-    are the results.
-* Morphological neural network (max+ convolutions) post processing
-  * Single layers seems the "less bad"
-* Diffusion model (learn noise to image / predict image to image)
-  * TLDT (too long didn't test)
-
-
-## Requirements
-
-```
-h5py==3.12.1
-numpy==2.2.1
-tifffile==2025.1.10
-
-scipy==1.15.2
-scikit-image==0.25.2
-PyWavelets==1.8.0
-
-tensorflow==2.18.0
-```
